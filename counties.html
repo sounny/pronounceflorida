@@ -56,7 +56,7 @@
                     speechSynthesis.speak(utterance);
                 });
 
-            svg.selectAll("text")
+            const labels = svg.selectAll("text")
                 .data(data.features)
                 .enter()
                 .append("text")
@@ -69,6 +69,33 @@
                 .on("mouseout", function() {
                     d3.select(this).style("font-size", "10px");
                 });
+
+            // Prevent label overlap by shifting colliding labels downward
+            const padding = 2;
+            const placed = [];
+            labels.each(function() {
+                const el = d3.select(this);
+                const transform = el.attr("transform");
+                const match = /translate\(([^,]+),([^\)]+)\)/.exec(transform);
+                if (!match) return;
+                let x = +match[1];
+                let y = +match[2];
+                const bbox = el.node().getBBox();
+                let box = { x: x, y: y, width: bbox.width, height: bbox.height };
+                for (const b of placed) {
+                    while (
+                        box.x < b.x + b.width + padding &&
+                        box.x + box.width + padding > b.x &&
+                        box.y < b.y + b.height + padding &&
+                        box.y + box.height + padding > b.y
+                    ) {
+                        y += box.height + padding;
+                        box.y = y;
+                    }
+                }
+                el.attr("transform", `translate(${x},${y})`);
+                placed.push(box);
+            });
         });
     </script>
 </body>
