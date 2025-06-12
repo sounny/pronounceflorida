@@ -23,18 +23,26 @@
         #info {
             width: 100%;
             max-height: 40%;
-            padding: 10px;
-            background: #fff;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
             border-top: 1px solid #ccc;
             overflow-y: auto;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px 8px 0 0;
             transition: transform 0.3s;
         }
         #info.collapsed {
-            transform: translateY(calc(100% - 30px));
+            transform: translateY(calc(100% - 40px));
         }
         #toggle-info {
             display: block;
-            margin: 0 auto 5px;
+            margin: 0 auto 10px;
+            padding: 6px 12px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
         #info.collapsed > *:not(#toggle-info) {
             display: none;
@@ -48,6 +56,8 @@
                 max-height: none;
                 border-top: none;
                 border-left: 1px solid #ccc;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                border-radius: 0 0 0 8px;
                 transform: translateY(0);
             }
             #info.collapsed {
@@ -78,9 +88,14 @@
         text.label:hover {
             font-size: 14px;
         }
+        h1 {
+            text-align: center;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
+    <h1>Proncue Florida County Maps</h1>
     <div id="map-container">
         <svg></svg>
     </div>
@@ -92,6 +107,9 @@
         <p id="county-origin"></p>
         <p id="county-origin-code"></p>
         <button id="play-btn" disabled>Play Pronunciation</button>
+        <p><a href="https://sounny.github.io/pronounceflorida/">Back to Main Page</a></p>
+        <p><a href="https://studio--florida-voices-nnorn.us-central1.hosted.app/" target="_blank">Contribute your voice</a></p>
+        <p><a href="https://en.wikipedia.org/wiki/ARPABET" target="_blank">Learn more about ARPABET alphabet</a></p>
     </div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -170,7 +188,7 @@
         const width = svg.node().clientWidth;
         const height = svg.node().clientHeight;
         const g = svg.append("g");
-        const projection = d3.geoMercator().scale(4000).center([-83.5, 28.8]).translate([width / 2, height / 2]);
+        const projection = d3.geoMercator().scale(5000).center([-83.5, 28.8]).translate([width / 2, height / 2]);
         const path = d3.geoPath(projection);
         svg.call(d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => {
             g.attr("transform", event.transform);
@@ -246,24 +264,17 @@
         const infoPanel = document.getElementById('info');
         const toggleBtn = document.getElementById('toggle-info');
 
-        function updatePanelState() {
-            if (window.innerWidth >= 600) {
-                infoPanel.classList.remove('collapsed');
-                toggleBtn.textContent = 'Hide Info';
-            } else if (!infoPanel.classList.contains('collapsed')) {
-                toggleBtn.textContent = 'Hide Info';
-            } else {
-                toggleBtn.textContent = 'Show Info';
-            }
+        function updateToggleText() {
+            toggleBtn.textContent = infoPanel.classList.contains('collapsed') ? 'Show Info' : 'Hide Info';
         }
 
         toggleBtn.addEventListener('click', () => {
             infoPanel.classList.toggle('collapsed');
-            updatePanelState();
+            updateToggleText();
         });
 
-        window.addEventListener('resize', updatePanelState);
-        updatePanelState();
+        window.addEventListener('resize', updateToggleText);
+        updateToggleText();
     </script>
 </body>
 </html>
