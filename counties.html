@@ -137,7 +137,7 @@
         const width = svg.node().clientWidth;
         const height = svg.node().clientHeight;
         const g = svg.append("g");
-        const projection = d3.geoMercator().scale(4000).center([-83.5, 28.8]).translate([width / 2, height / 2]);
+        const projection = d3.geoMercator().scale(5000).center([-83.5, 28.8]).translate([width / 2, height / 2]);
         const path = d3.geoPath(projection);
         svg.call(d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => {
             g.attr("transform", event.transform);
@@ -178,32 +178,21 @@
                     d3.select(this).style("font-size", "10px");
                 });
 
-            // Prevent label overlap by shifting colliding labels downward
-            const padding = 2;
-            const placed = [];
-            labels.each(function() {
-                const el = d3.select(this);
-                const transform = el.attr("transform");
-                const match = /translate\(([^,]+),([^\)]+)\)/.exec(transform);
-                if (!match) return;
-                let x = +match[1];
-                let y = +match[2];
-                const bbox = el.node().getBBox();
-                let box = { x: x, y: y, width: bbox.width, height: bbox.height };
-                for (const b of placed) {
-                    while (
-                        box.x < b.x + b.width + padding &&
-                        box.x + box.width + padding > b.x &&
-                        box.y < b.y + b.height + padding &&
-                        box.y + box.height + padding > b.y
-                    ) {
-                        y += box.height + padding;
-                        box.y = y;
-                    }
-                }
-                el.attr("transform", `translate(${x},${y})`);
-                placed.push(box);
+            // Use force simulation to prevent label overlap
+            const labelData = data.features.map(d => {
+                const [x, y] = path.centroid(d);
+                return {feature: d, x, y};
             });
+            const sim = d3.forceSimulation(labelData)
+                .force("x", d3.forceX(d => d.x))
+                .force("y", d3.forceY(d => d.y))
+                .force("collide", d3.forceCollide(12))
+                .stop();
+            for (let i = 0; i < 120; ++i) {
+                sim.tick();
+            }
+            labels.data(labelData)
+                .attr("transform", d => `translate(${d.x},${d.y})`);
         });
     </script>
 </body>
