@@ -7,17 +7,35 @@
     <style>
         body {
             margin: 0;
-            background: #eee;
             font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+        #map-container {
+            flex: 1;
         }
         svg {
+            width: 100%;
+            height: 100%;
             display: block;
-            margin: auto;
+        }
+        #info {
+            width: 250px;
+            padding: 10px;
+            background: #fff;
+            border-left: 1px solid #ccc;
+        }
+        #play-btn {
+            margin-top: 10px;
         }
         .county {
             fill: #f8f8f8;
             stroke: #bbb;
             stroke-width: 1;
+        }
+        .county.active {
+            stroke: red;
+            stroke-width: 3;
         }
         text.label {
             font-size: 10px;
@@ -34,29 +52,119 @@
     </style>
 </head>
 <body>
-    <svg width="800" height="600"></svg>
+    <div id="map-container">
+        <svg></svg>
+    </div>
+    <div id="info">
+        <h2 id="county-name">Click a county</h2>
+        <p id="county-phonetic"></p>
+        <button id="play-btn" disabled>Play Pronunciation</button>
+    </div>
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
+        const phonetics = {
+            "Alachua": "AH0 L AE1 CH UW0 AH0",
+            "Baker": "B EY1 K ER0",
+            "Bay": "B EY1",
+            "Bradford": "B R AE1 D F ER0 D",
+            "Brevard": "B R EH1 V ER0 D",
+            "Broward": "B R AW1 ER0 D",
+            "Calhoun": "K AE0 L HH UW1 N",
+            "Charlotte": "SH AA1 R L AH0 T",
+            "Citrus": "S IH1 T R AH0 S",
+            "Clay": "K L EY1",
+            "Collier": "K AA1 L Y ER0",
+            "Columbia": "K AH0 L AH1 M B IY0 AH0",
+            "DeSoto": "D IH0 S OW1 T OW0",
+            "Dixie": "D IH1 K S IY0",
+            "Duval": "D UW0 V AE1 L",
+            "Escambia": "EH2 S K AE1 M B IY0 AH0",
+            "Flagler": "F L AE1 G L ER0",
+            "Franklin": "F R AE1 NG K L IH0 N",
+            "Gadsden": "G AE1 D Z D AH0 N",
+            "Gilchrist": "G IH1 L K R IH0 S T",
+            "Glades": "G L EY1 D Z",
+            "Gulf": "G AH1 L F",
+            "Hamilton": "HH AE1 M AH0 L T AH0 N",
+            "Hardee": "HH AA1 R D IY1",
+            "Hendry": "HH EH1 N D R IY0",
+            "Hernando": "HH ER0 N AA1 N D OW0",
+            "Highlands": "HH AY1 L AH0 N D Z",
+            "Hillsborough": "HH IH1 L Z B ER0 OW0",
+            "Holmes": "HH OW1 M Z",
+            "Indian River": "IH1 N D IY0 AH0 N   R IH1 V ER0",
+            "Jackson": "JH AE1 K S AH0 N",
+            "Jefferson": "JH EH1 F ER0 S AH0 N",
+            "Lafayette": "L AA2 F IY0 EH1 T",
+            "Lake": "L EY1 K",
+            "Lee": "L IY1",
+            "Leon": "L IY1 AA0 N",
+            "Levy": "L EH1 V IY0",
+            "Liberty": "L IH1 B ER0 T IY2",
+            "Madison": "M AE1 D AH0 S AH0 N",
+            "Manatee": "M AE1 N AH0 T IY2",
+            "Marion": "M EH1 R IY0 AH0 N",
+            "Martin": "M AA1 R T AH0 N",
+            "Miami-Dade": "M AY0 AE1 M IY0   D EY1 D",
+            "Monroe": "M AH0 N R OW1",
+            "Nassau": "N AE1 S AO0",
+            "Okaloosa": "AO2 K AH0 L UW1 S AH0",
+            "Okeechobee": "OW0 K IY2 CH OW1 B IY0",
+            "Orange": "AO1 R AH0 N JH",
+            "Osceola": "AO2 S K IY0 OW1 L AH0",
+            "Palm Beach": "P AA1 M   B IY1 CH",
+            "Pasco": "P AA1 S K OW0",
+            "Pinellas": "P IH0 N EH1 L AH0 S",
+            "Polk": "P OW1 K",
+            "Putnam": "P AH1 T N AH0 M",
+            "Santa Rosa": "S AE1 N T AH0   R OW1 Z AH0",
+            "Sarasota": "S EH2 R AH0 S OW1 T AH0",
+            "Seminole": "S EH1 M IH0 N OW2 L",
+            "St. Johns": "S T R IY1 T   JH AA1 N Z",
+            "St. Lucie": "S T R IY1 T   L UW1 S IY0",
+            "Sumter": "S AH1 M T ER0",
+            "Suwannee": "S UW2 W AA1 N IY0",
+            "Taylor": "T EY1 L ER0",
+            "Union": "Y UW1 N Y AH0 N",
+            "Volusia": "V AH0 L UW1 ZH AH0",
+            "Wakulla": "W AA0 K UW1 L Y AH0",
+            "Walton": "W AO1 L T AH0 N",
+            "Washington": "W AA1 SH IH0 NG T AH0 N"
+        };
+
         const svg = d3.select("svg");
-        const width = +svg.attr("width");
-        const height = +svg.attr("height");
+        const width = svg.node().clientWidth;
+        const height = svg.node().clientHeight;
+        const g = svg.append("g");
         const projection = d3.geoMercator().scale(4000).center([-83.5, 28.8]).translate([width / 2, height / 2]);
         const path = d3.geoPath(projection);
+        svg.call(d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => {
+            g.attr("transform", event.transform);
+        }));
 
         d3.json("florida_counties.geojson").then(data => {
-            svg.selectAll("path")
+            g.selectAll("path")
                 .data(data.features)
                 .enter()
                 .append("path")
                 .attr("class", "county")
                 .attr("d", path)
                 .on("click", (event, d) => {
-                    const utterance = new SpeechSynthesisUtterance(d.properties.NAME + " County");
+                    const el = d3.select(event.currentTarget);
+                    el.classed("active", true);
+                    setTimeout(() => el.classed("active", false), 2000);
+                    const name = d.properties.NAME;
+                    const utterance = new SpeechSynthesisUtterance(name + " County");
                     speechSynthesis.speak(utterance);
+                    d3.select("#county-name").text(name + " County");
+                    d3.select("#county-phonetic").text(phonetics[name] || "");
+                    d3.select("#play-btn")
+                        .property("disabled", false)
+                        .on("click", () => speechSynthesis.speak(utterance));
                 });
 
-            const labels = svg.selectAll("text")
+            const labels = g.selectAll("text")
                 .data(data.features)
                 .enter()
                 .append("text")
