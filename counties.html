@@ -58,6 +58,9 @@
     <div id="info">
         <h2 id="county-name">Click a county</h2>
         <p id="county-phonetic"></p>
+        <p id="county-pronunciation"></p>
+        <p id="county-origin"></p>
+        <p id="county-origin-code"></p>
         <button id="play-btn" disabled>Play Pronunciation</button>
     </div>
 
@@ -143,7 +146,7 @@
             g.attr("transform", event.transform);
         }));
 
-        d3.json("florida_counties.geojson").then(data => {
+        Promise.all([d3.json("florida_counties.geojson"), d3.json("county_info.json")]).then(([data, countyInfo]) => {
             g.selectAll("path")
                 .data(data.features)
                 .enter()
@@ -159,6 +162,10 @@
                     speechSynthesis.speak(utterance);
                     d3.select("#county-name").text(name + " County");
                     d3.select("#county-phonetic").text(phonetics[name] || "");
+                    const info = countyInfo[name] || {};
+                    d3.select("#county-pronunciation").text(info.pronunciation ? `Pronunciation: ${info.pronunciation}` : "");
+                    d3.select("#county-origin").text(info.origin ? `Origin: ${info.origin}` : "");
+                    d3.select("#county-origin-code").text(info.originCode ? `Origin Code: ${info.originCode}` : "");
                     d3.select("#play-btn")
                         .property("disabled", false)
                         .on("click", () => speechSynthesis.speak(utterance));
