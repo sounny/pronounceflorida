@@ -7,105 +7,80 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-o9N1jft6Jb5PzsUfL5tGI63ZMK+3UU5s5HtmDlfP0jE=" crossorigin="">
     <style>
         body {
             margin: 0;
             font-family: 'Roboto', sans-serif;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            background: #f5f7fa;
         }
-        #map-container {
+        #map {
             flex: 1;
         }
-        svg {
-            width: 100%;
-            height: 100%;
-            display: block;
+        h1 {
+            text-align: center;
+            margin: 0.5em 0;
+            color: #0021A5;
         }
+        /* info panel */
         #info {
-            width: 100%;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
             max-height: 40%;
+            background: rgba(255,255,255,0.95);
             padding: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            border-top: 1px solid #ccc;
             overflow-y: auto;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            border-radius: 8px 8px 0 0;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            transform: translateY(calc(100% - 40px));
             transition: transform 0.3s;
         }
-        #info.collapsed {
-            transform: translateY(calc(100% - 40px));
+        #info.expanded {
+            transform: translateY(0);
         }
         #toggle-info {
             display: block;
             margin: 0 auto 10px;
             padding: 6px 12px;
-            background: #007bff;
+            background: #FA4616;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
-        #info.collapsed > *:not(#toggle-info) {
-            display: none;
-        }
-        @media (min-width: 600px) {
-            body {
-                flex-direction: row;
-            }
+        #play-btn { margin-top: 10px; }
+        @media (min-width: 768px) {
             #info {
-                width: 250px;
-                max-height: none;
-                border-top: none;
-                border-left: 1px solid #ccc;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                border-radius: 0 0 0 8px;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 300px;
+                left: auto;
+                transform: translateX(calc(100% - 40px));
+                border-radius: 8px 0 0 8px;
+            }
+            #info.expanded {
                 transform: translateX(0);
             }
-            #info.collapsed {
-                transform: translateX(calc(100% - 40px));
-            }
         }
-        #play-btn {
-            margin-top: 10px;
-        }
-        .county {
-            fill: #f8f8f8;
-            stroke: #bbb;
-            stroke-width: 1;
-        }
-        .county.active {
-            stroke: red;
-            stroke-width: 3;
-        }
-        text.label {
+        .leaflet-tooltip.county-label {
+            background: rgba(255,255,255,0.8);
+            border: none;
+            box-shadow: none;
             font-size: 10px;
-            fill: #333;
-            pointer-events: none;
-            paint-order: stroke;
-            stroke: white;
-            stroke-width: 3px;
-            stroke-linejoin: round;
-        }
-        text.label:hover {
-            font-size: 14px;
-        }
-        h1 {
-            text-align: center;
-            margin: 10px 0;
-            font-size: 1.5em;
-            font-weight: 700;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <h1>Pronounce Florida County Map</h1>
-    <div id="map-container">
-        <svg></svg>
-    </div>
-    <div id="info" class="collapsed">
+    <div id="map"></div>
+    <div id="info">
         <button id="toggle-info">Show Info</button>
         <h2 id="county-name">Click a county</h2>
         <p id="county-phonetic"></p>
@@ -118,7 +93,7 @@
         <p><a href="https://en.wikipedia.org/wiki/ARPABET" target="_blank">Learn more about ARPABET alphabet</a></p>
     </div>
 
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-oDQt3FeWDxLLBy3jrAmA9sijYfeCiwAB7jMk1iEO+gQ=" crossorigin=""></script>
     <script>
         const phonetics = {
             "Alachua": "AH0 L AE1 CH UW0 AH0",
@@ -190,97 +165,69 @@
             "Washington": "W AA1 SH IH0 NG T AH0 N"
         };
 
-        const svg = d3.select("svg");
-        const width = svg.node().clientWidth;
-        const height = svg.node().clientHeight;
-        const g = svg.append("g");
-        const projection = d3.geoMercator().scale(5000).center([-83.5, 28.8]).translate([width / 2, height / 2]);
-        const path = d3.geoPath(projection);
-        svg.call(d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => {
-            g.attr("transform", event.transform);
-        }));
+        const map = L.map('map').setView([27.8, -81.7], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
-        Promise.all([d3.json("florida_counties.geojson"), d3.json("county_info.json")]).then(([data, countyInfo]) => {
-            g.selectAll("path")
-                .data(data.features)
-                .enter()
-                .append("path")
-                .attr("class", "county")
-                .attr("d", path)
-                .on("click", (event, d) => {
-                    const el = d3.select(event.currentTarget);
-                    el.classed("active", true);
-                    setTimeout(() => el.classed("active", false), 2000);
-                    const name = d.properties.NAME;
-                    const utterance = new SpeechSynthesisUtterance(name + " County");
-                    speechSynthesis.speak(utterance);
-                    d3.select("#county-name").text(name + " County");
-                    d3.select("#county-phonetic").text(phonetics[name] || "");
-                    const info = countyInfo[name] || {};
-                    d3.select("#county-pronunciation").text(info.pronunciation ? `Pronunciation: ${info.pronunciation}` : "");
-                    d3.select("#county-origin").text(info.origin ? `Origin: ${info.origin}` : "");
-                    d3.select("#county-origin-code").text(info.originCode ? `Origin Code: ${info.originCode}` : "");
-                    d3.select("#play-btn")
-                        .property("disabled", false)
-                        .on("click", () => speechSynthesis.speak(utterance));
+        let countyInfo = {};
+        fetch('county_info.json').then(r => r.json()).then(d => countyInfo = d);
+
+        fetch('florida_counties.geojson').then(r => r.json()).then(data => {
+            const defaultStyle = {
+                color: '#bbb',
+                weight: 1,
+                fillColor: '#f8f8f8',
+                fillOpacity: 0.7
+            };
+            const highlightStyle = {
+                weight: 2,
+                color: '#FA4616',
+                fillOpacity: 0.9
+            };
+
+            function onEachFeature(feature, layer) {
+                const name = feature.properties.NAME;
+                layer.bindTooltip(name, {permanent: false, direction: 'center', className: 'county-label'});
+                layer.on({
+                    mouseover: e => layer.setStyle(highlightStyle),
+                    mouseout: e => layer.setStyle(defaultStyle),
+                    click: () => showInfo(name)
                 });
+            }
 
-            const labels = g.selectAll("text")
-                .data(data.features)
-                .enter()
-                .append("text")
-                .attr("class", "label")
-                .attr("transform", d => `translate(${path.centroid(d)})`)
-                .text(d => d.properties.NAME)
-                .on("mouseover", function() {
-                    d3.select(this).style("font-size", "14px");
-                })
-                .on("mouseout", function() {
-                    d3.select(this).style("font-size", "10px");
-                });
-
-            // Prevent label overlap by shifting colliding labels downward
-            const padding = 2;
-            const placed = [];
-            labels.each(function() {
-                const el = d3.select(this);
-                const transform = el.attr("transform");
-                const match = /translate\(([^,]+),([^\)]+)\)/.exec(transform);
-                if (!match) return;
-                let x = +match[1];
-                let y = +match[2];
-                const bbox = el.node().getBBox();
-                let box = { x: x, y: y, width: bbox.width, height: bbox.height };
-                for (const b of placed) {
-                    while (
-                        box.x < b.x + b.width + padding &&
-                        box.x + box.width + padding > b.x &&
-                        box.y < b.y + b.height + padding &&
-                        box.y + box.height + padding > b.y
-                    ) {
-                        y += box.height + padding;
-                        box.y = y;
-                    }
-                }
-                el.attr("transform", `translate(${x},${y})`);
-                placed.push(box);
-            });
+            L.geoJSON(data, {style: defaultStyle, onEachFeature}).addTo(map);
         });
 
         const infoPanel = document.getElementById('info');
         const toggleBtn = document.getElementById('toggle-info');
+        const playBtn = document.getElementById('play-btn');
 
-        function updateToggleText() {
-            toggleBtn.textContent = infoPanel.classList.contains('collapsed') ? 'Show Info' : 'Hide Info';
+        function showInfo(name) {
+            document.getElementById('county-name').textContent = name + ' County';
+            document.getElementById('county-phonetic').textContent = phonetics[name] || '';
+            const info = countyInfo[name] || {};
+            document.getElementById('county-pronunciation').textContent = info.pronunciation ? `Pronunciation: ${info.pronunciation}` : '';
+            document.getElementById('county-origin').textContent = info.origin ? `Origin: ${info.origin}` : '';
+            document.getElementById('county-origin-code').textContent = info.originCode ? `Origin Code: ${info.originCode}` : '';
+            const utterance = new SpeechSynthesisUtterance(name + ' County');
+            playBtn.onclick = () => speechSynthesis.speak(utterance);
+            playBtn.disabled = false;
+            expandInfo();
+        }
+
+        function expandInfo(){
+            if(!infoPanel.classList.contains('expanded')){
+                infoPanel.classList.add('expanded');
+                toggleBtn.textContent = 'Hide Info';
+            }
         }
 
         toggleBtn.addEventListener('click', () => {
-            infoPanel.classList.toggle('collapsed');
-            updateToggleText();
+            infoPanel.classList.toggle('expanded');
+            toggleBtn.textContent = infoPanel.classList.contains('expanded') ? 'Hide Info' : 'Show Info';
         });
-
-        window.addEventListener('resize', updateToggleText);
-        updateToggleText();
     </script>
 </body>
 </html>
