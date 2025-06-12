@@ -9,6 +9,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             height: 100vh;
         }
         #map-container {
@@ -20,10 +21,38 @@
             display: block;
         }
         #info {
-            width: 250px;
+            width: 100%;
+            max-height: 40%;
             padding: 10px;
             background: #fff;
-            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            overflow-y: auto;
+            transition: transform 0.3s;
+        }
+        #info.collapsed {
+            transform: translateY(calc(100% - 30px));
+        }
+        #toggle-info {
+            display: block;
+            margin: 0 auto 5px;
+        }
+        #info.collapsed > *:not(#toggle-info) {
+            display: none;
+        }
+        @media (min-width: 600px) {
+            body {
+                flex-direction: row;
+            }
+            #info {
+                width: 250px;
+                max-height: none;
+                border-top: none;
+                border-left: 1px solid #ccc;
+                transform: translateY(0);
+            }
+            #info.collapsed {
+                transform: none;
+            }
         }
         #play-btn {
             margin-top: 10px;
@@ -55,7 +84,8 @@
     <div id="map-container">
         <svg></svg>
     </div>
-    <div id="info">
+    <div id="info" class="collapsed">
+        <button id="toggle-info">Show Info</button>
         <h2 id="county-name">Click a county</h2>
         <p id="county-phonetic"></p>
         <p id="county-pronunciation"></p>
@@ -212,6 +242,28 @@
                 placed.push(box);
             });
         });
+
+        const infoPanel = document.getElementById('info');
+        const toggleBtn = document.getElementById('toggle-info');
+
+        function updatePanelState() {
+            if (window.innerWidth >= 600) {
+                infoPanel.classList.remove('collapsed');
+                toggleBtn.textContent = 'Hide Info';
+            } else if (!infoPanel.classList.contains('collapsed')) {
+                toggleBtn.textContent = 'Hide Info';
+            } else {
+                toggleBtn.textContent = 'Show Info';
+            }
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            infoPanel.classList.toggle('collapsed');
+            updatePanelState();
+        });
+
+        window.addEventListener('resize', updatePanelState);
+        updatePanelState();
     </script>
 </body>
 </html>
