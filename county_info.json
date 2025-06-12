@@ -1,0 +1,337 @@
+{
+  "Alachua": {
+    "pronunciation": "ə-LATCH-oo-ə",
+    "origin": "from Seminole-Creek word 'jug', in reference to sinkholes",
+    "originCode": "I"
+  },
+  "Baker": {
+    "pronunciation": "bay-kr",
+    "origin": "James McNair Baker, conferderate congressman and judge",
+    "originCode": "A"
+  },
+  "Bay": {
+    "pronunciation": "bay",
+    "origin": "named from St.Andrew's Bay",
+    "originCode": "A"
+  },
+  "Bradford": {
+    "pronunciation": "brad-frd",
+    "origin": "Richard Bradord, 1st offcier from Florida to die in Civil War",
+    "originCode": "A"
+  },
+  "Brevard": {
+    "pronunciation": "brə-VARD",
+    "origin": "Theodore Washington Brevard, former state comptroller",
+    "originCode": "A"
+  },
+  "Broward": {
+    "pronunciation": "brau-urd",
+    "origin": "Napoleon Bonaparte Broward, 19th Florida governer",
+    "originCode": "A"
+  },
+  "Calhoun": {
+    "pronunciation": "cah-loon",
+    "origin": "John C. Calhoun, politician from South Carolina ",
+    "originCode": "A"
+  },
+  "Charlotte": {
+    "pronunciation": "shahr-lot",
+    "origin": "corruption of name Calusa, group of Native Americans ",
+    "originCode": "I"
+  },
+  "Citrus": {
+    "pronunciation": "si-truhs",
+    "origin": "named from citrus trees in area",
+    "originCode": "A"
+  },
+  "Clay": {
+    "pronunciation": "klay",
+    "origin": "Henry Clay, John Adam's secretary of state ",
+    "originCode": "A"
+  },
+  "Collier": {
+    "pronunciation": "kaa-lee-ur",
+    "origin": "Barron Collier, entreprenuer and South Florida developer",
+    "originCode": "A"
+  },
+  "Columbia": {
+    "pronunciation": "kuh-LUM-bee-uh",
+    "origin": "Christopher Columbus ",
+    "originCode": "A"
+  },
+  "DeSoto": {
+    "pronunciation": "de-SOH-toh",
+    "origin": "Hernando de Soto, Spanish conquistador ",
+    "originCode": "S"
+  },
+  "Dixie": {
+    "pronunciation": "dik-see",
+    "origin": "Dixie, common name for Southern States",
+    "originCode": "A"
+  },
+  "Duval": {
+    "pronunciation": "doo-val",
+    "origin": "William Pope Duval, 1st governer of Florida Territory",
+    "originCode": "A"
+  },
+  "Escambia": {
+    "pronunciation": "eh-skam-bee-uh",
+    "origin": "disputed, possibly from Creek word Shambia or Spanish word cambiar",
+    "originCode": "I"
+  },
+  "Flagler": {
+    "pronunciation": "FLAG-ler",
+    "origin": "Henry Morrison Flagler, founder of Florida East Coast Railway",
+    "originCode": "A"
+  },
+  "Franklin": {
+    "pronunciation": "frang-kluhn",
+    "origin": "Benjamin Franklin",
+    "originCode": "A"
+  },
+  "Gadsden": {
+    "pronunciation": "gadz-dn",
+    "origin": "James Gadsden, diplomat",
+    "originCode": "A"
+  },
+  "Gilchrist": {
+    "pronunciation": "gil-krist",
+    "origin": "Albert W. Gilchrist, 20th Florida governer  ",
+    "originCode": "A"
+  },
+  "Glades": {
+    "pronunciation": "glaydz",
+    "origin": "Florida Everglades",
+    "originCode": "A"
+  },
+  "Gulf": {
+    "pronunciation": "guhlf",
+    "origin": "Gulf of Mexico",
+    "originCode": "A"
+  },
+  "Hamilton": {
+    "pronunciation": "HÆM-il-tuhn",
+    "origin": "Alexander Hamilton",
+    "originCode": "A"
+  },
+  "Hardee": {
+    "pronunciation": "har-di",
+    "origin": "Cary A Hardee, former Florida governor",
+    "originCode": "A"
+  },
+  "Hendry": {
+    "pronunciation": "hen-dree",
+    "origin": "Francis A. Hendry, early Flroida pioneer and politician",
+    "originCode": "A"
+  },
+  "Hernando": {
+    "pronunciation": "her-nan-do",
+    "origin": "Hernando de Soto, Spanish conquistador  ",
+    "originCode": "S"
+  },
+  "Highlands": {
+    "pronunciation": "haɪ-landz",
+    "origin": "names for county's hilly terrain",
+    "originCode": "A"
+  },
+  "Hillsborough": {
+    "pronunciation": "hilz-ber-uh",
+    "origin": "Wills Hill, Earl of Hillsborough, former secretary of state for the colonies",
+    "originCode": "A"
+  },
+  "Holmes": {
+    "pronunciation": "hol-mz",
+    "origin": "Holmes Creek, eastern boundary of region",
+    "originCode": "A"
+  },
+  "Indian River": {
+    "pronunciation": "in-dee-en riv-er",
+    "origin": "Indian River Lagoon",
+    "originCode": "I"
+  },
+  "Jackson": {
+    "pronunciation": "jak-suhn",
+    "origin": "Andrew Jackson",
+    "originCode": "A"
+  },
+  "Jefferson": {
+    "pronunciation": "jef-er-son",
+    "origin": "Thomas Jefferson",
+    "originCode": "A"
+  },
+  "Lafayette": {
+    "pronunciation": "la-fay-ett",
+    "origin": "Gilbert du Motier, marquis de La Fayette",
+    "originCode": "A"
+  },
+  "Lake": {
+    "pronunciation": "layk",
+    "origin": "many lakes in the region",
+    "originCode": "A"
+  },
+  "Lee": {
+    "pronunciation": "lee",
+    "origin": "Robert E. Lee, Confederate general",
+    "originCode": "A"
+  },
+  "Leon": {
+    "pronunciation": "lee-on",
+    "origin": "Juan Ponce de Leon, Spanish explorer",
+    "originCode": "S"
+  },
+  "Levy": {
+    "pronunciation": "lee-vee",
+    "origin": "David Levy Yulee, U.S. senator and railroad developer",
+    "originCode": "A"
+  },
+  "Liberty": {
+    "pronunciation": "lib-er-tee",
+    "origin": "American ideals",
+    "originCode": "A"
+  },
+  "Madison": {
+    "pronunciation": "mad-uh-sun",
+    "origin": "James Madison, U.S. President",
+    "originCode": "A"
+  },
+  "Manatee": {
+    "pronunciation": "man-uh-tee",
+    "origin": "Native mammals to FL",
+    "originCode": "I"
+  },
+  "Marion": {
+    "pronunciation": "mair-ee-un",
+    "origin": "General Francis Marion, the 'Swamp Fox' of the revolutionary war",
+    "originCode": "A"
+  },
+  "Martin": {
+    "pronunciation": "mar-tin",
+    "origin": "John W. Martin, Florida governor",
+    "originCode": "A"
+  },
+  "Miami-Dade": {
+    "pronunciation": "my-am-ee dayd",
+    "origin": "Major Francis L. Dade; renamed Miami-Dade",
+    "originCode": "A"
+  },
+  "Monroe": {
+    "pronunciation": "mun-roh",
+    "origin": "James Monroe, U.S. President",
+    "originCode": "A"
+  },
+  "Nassau": {
+    "pronunciation": "na-saw",
+    "origin": "Duchy of Nassau in Germany",
+    "originCode": "A"
+  },
+  "Okaloosa": {
+    "pronunciation": "oh-ka-loo-sah",
+    "origin": "Choctaw word meaning 'black water'",
+    "originCode": "I"
+  },
+  "Okeechobee": {
+    "pronunciation": "oh-kee-cho-bee",
+    "origin": "Hitchi words 'oki' (water) and 'chubi' (big)",
+    "originCode": "I"
+  },
+  "Orange": {
+    "pronunciation": "or-inj",
+    "origin": "Citrus fruit",
+    "originCode": "A"
+  },
+  "Osceola": {
+    "pronunciation": "oss-ee-oh-luh",
+    "origin": "Seminole leader Osceola",
+    "originCode": "I"
+  },
+  "Palm Beach": {
+    "pronunciation": "pahm beech",
+    "origin": "palms trees and beach coastlines",
+    "originCode": "A"
+  },
+  "Pasco": {
+    "pronunciation": "pass-ko",
+    "origin": "Samuel Pasco, U.S. senator",
+    "originCode": "A"
+  },
+  "Pinellas": {
+    "pronunciation": "pin-ell-us",
+    "origin": "Spanish 'La Punta Pinal', meaning 'Point of Pines'",
+    "originCode": "S"
+  },
+  "Polk": {
+    "pronunciation": "pohlk",
+    "origin": "James K. Pok, U.S. President",
+    "originCode": "A"
+  },
+  "Putnam": {
+    "pronunciation": "put-nam",
+    "origin": "Benjamin A. Putnam, soldier and legislator",
+    "originCode": "A"
+  },
+  "St.Johns": {
+    "pronunciation": "Saint Johns",
+    "origin": "St. Johns River",
+    "originCode": "S"
+  },
+  "St.Lucie": {
+    "pronunciation": "Saint Loo-see",
+    "origin": "Spanish for 'Santa Lucia'",
+    "originCode": "S"
+  },
+  "Santa Rosa": {
+    "pronunciation": "San-ta roh-zuh",
+    "origin": "Spanish for 'Saint Rose'",
+    "originCode": "S"
+  },
+  "Sarasota": {
+    "pronunciation": "sair-uh-so-tuh",
+    "origin": "Likely of Spanish origin, 'Zarazote' on map, ",
+    "originCode": "S"
+  },
+  "Seminole": {
+    "pronunciation": "sem-uh-mohl",
+    "origin": "Seminole people",
+    "originCode": "I"
+  },
+  "Sumter": {
+    "pronunciation": "sump-ter",
+    "origin": "General Thomas Sumter, hero of reovultionary war",
+    "originCode": "A"
+  },
+  "Suwannee": {
+    "pronunciation": "swah-nee",
+    "origin": "Suwannee River, Native American word",
+    "originCode": "I"
+  },
+  "Taylor": {
+    "pronunciation": "tay-ler",
+    "origin": "Zachary Taylor, U.S. President",
+    "originCode": "A"
+  },
+  "Union": {
+    "pronunciation": "yoo-nyun",
+    "origin": "Civil War reference to the Union",
+    "originCode": "A"
+  },
+  "Volusia": {
+    "pronunciation": "vuh-loo-shuh",
+    "origin": "Latin, name for Roman Godess",
+    "originCode": "A"
+  },
+  "Wakulla": {
+    "pronunciation": "wah-kull-uh",
+    "origin": "Native American word meaning 'spring of water'",
+    "originCode": "I"
+  },
+  "Walton": {
+    "pronunciation": "wall-ton",
+    "origin": "Colonel George Walton, secretary of the Florida territory",
+    "originCode": "A"
+  },
+  "Washington": {
+    "pronunciation": "wash-ing-tun",
+    "origin": "George Washington, U.S. President",
+    "originCode": "A"
+  }
+}
