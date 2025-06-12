@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronounce Florida - Record Pronunciation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-o9N1jft6Jb5PzsUfL5tGI63ZMK+3UU5s5HtmDlfP0jE=" crossorigin="">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 1em;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        #map {
+            width: 100%;
+            height: 300px;
+            margin-top: 1em;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button, textarea {
+            padding: 0.5em;
+            font-size: 1em;
+        }
+        .record-controls button {
+            margin-right: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Record a Pronunciation</h1>
+    <form id="searchForm">
+        <label for="placeName">Search Florida Place Name:</label>
+        <input type="text" id="placeName" required placeholder="e.g. Okeechobee" />
+        <button type="submit">Search GNIS</button>
+    </form>
+
+    <div id="map" style="display:none;"></div>
+
+    <form id="entryForm" style="display:none;">
+        <label for="featureName">Place Name</label>
+        <input type="text" id="featureName" readonly />
+
+        <label for="featureClass">Feature Type</label>
+        <input type="text" id="featureClass" readonly />
+
+        <label for="featureId">GNIS ID</label>
+        <input type="text" id="featureId" readonly />
+
+        <fieldset>
+            <legend>Optional Demographic Info</legend>
+            <label for="isNative">Are you a Florida native?</label>
+            <select id="isNative">
+                <option value="">Prefer not to say</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <label for="demographic">Other (age, gender, etc.)</label>
+            <textarea id="demographic" rows="2" placeholder="Optional"></textarea>
+        </fieldset>
+
+        <div class="record-controls">
+            <button type="button" id="recordBtn">Start Recording</button>
+            <button type="button" id="stopBtn" disabled>Stop</button>
+        </div>
+        <audio id="audioPlayback" controls style="display:none;"></audio>
+    </form>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-oDQt3FeWDxLLBy3jrAmA9sijYfeCiwAB7jMk1iEO+gQ=" crossorigin=""></script>
+    <script>
+    const searchForm = document.getElementById('searchForm');
+    const entryForm = document.getElementById('entryForm');
+    const mapDiv = document.getElementById('map');
+
+    // Leaflet map instance
+    let map;
+    let marker;
+
+    searchForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('placeName').value.trim();
+        if(!name) return;
+
+        // Query GNIS API
+        // Endpoint docs: https://geonames.usgs.gov (may require CORS proxy)
+        const url = `https://geonames.usgs.gov/apex/gnissearch?q=${encodeURIComponent(name)}&format=json&state=FL`;
+        try {
+            const res = await fetch(url);
+            if(!res.ok) throw new Error('Network response was not ok');
+            const data = await res.json();
+            if(!data || !data[0]) {
+                alert('No results found');
+                return;
+            }
+            const result = data[0];
+
+            // Fill out form fields
+            document.getElementById('featureName').value = result.name;
+            document.getElementById('featureClass').value = result.feature_class;
+            document.getElementById('featureId').value = result.id;
+
+            // Show map
+            mapDiv.style.display = 'block';
+            entryForm.style.display = 'block';
+            if(!map) {
+                map = L.map('map').setView([result.latitude, result.longitude], 10);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
+            } else {
+                map.setView([result.latitude, result.longitude], 10);
+            }
+            if(marker) marker.remove();
+            marker = L.marker([result.latitude, result.longitude]).addTo(map);
+        } catch(err) {
+            alert('Error fetching GNIS data');
+            console.error(err);
+        }
+    });
+
+    // Recording functionality
+    const recordBtn = document.getElementById('recordBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const audioPlayback = document.getElementById('audioPlayback');
+    let mediaRecorder;
+    let audioChunks = [];
+
+    recordBtn.addEventListener('click', async () => {
+        if(!navigator.mediaDevices) {
+            alert('Audio recording not supported in this browser');
+            return;
+        }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        recordBtn.disabled = true;
+        stopBtn.disabled = false;
+        audioChunks = [];
+        mediaRecorder.ondataavailable = e => {
+            audioChunks.push(e.data);
+        };
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            const url = URL.createObjectURL(blob);
+            audioPlayback.src = url;
+            audioPlayback.style.display = 'block';
+        };
+    });
+
+    stopBtn.addEventListener('click', () => {
+        if(mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+    });
+    </script>
+</body>
+</html>
