@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pronounce Florida - An Exploration of Place Names in Florida</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background: linear-gradient(135deg, #eef2f7, #ffffff);
             text-align: center;
             flex-direction: column;
         }
@@ -20,20 +23,24 @@
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
         }
         h1 {
             color: #333;
+            font-size: 2em;
+            margin-bottom: 0.5em;
         }
         p {
-            color: #666;
-            font-size: 1.2em;
-            margin-bottom: 10px; /* Added for consistent spacing */
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 1em;
         }
-        .project-details { /* New class for detailed paragraphs */
-            font-size: 1.1em; /* Slightly smaller font */
-            color: #333;       /* Darker color for better readability */
-            line-height: 1.6;   /* Improved line spacing */
+        .project-details {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.6;
         }
         .description {
             font-size: 1em;

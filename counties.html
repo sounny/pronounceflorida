@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Florida Counties Pronunciation Map</title>
+    <title>Pronounce Florida County Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             display: flex;
             flex-direction: column;
             height: 100vh;
+            background: #f5f7fa;
         }
         #map-container {
             flex: 1;
@@ -58,10 +62,10 @@
                 border-left: 1px solid #ccc;
                 box-shadow: 0 0 10px rgba(0,0,0,0.1);
                 border-radius: 0 0 0 8px;
-                transform: translateY(0);
+                transform: translateX(0);
             }
             #info.collapsed {
-                transform: none;
+                transform: translateX(calc(100% - 40px));
             }
         }
         #play-btn {
@@ -91,11 +95,13 @@
         h1 {
             text-align: center;
             margin: 10px 0;
+            font-size: 1.5em;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
-    <h1>Proncue Florida County Maps</h1>
+    <h1>Pronounce Florida County Map</h1>
     <div id="map-container">
         <svg></svg>
     </div>
