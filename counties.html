@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="leaflet.css">
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_KEY"></script>
     <style>
         body {
             margin: 0;
@@ -76,6 +77,10 @@
             font-size: 10px;
             color: #333;
         }
+        .tts-group{margin-top:4px;}
+        .tts-item{display:flex; align-items:center; gap:6px; margin-bottom:4px;}
+        .tts-group button{padding:2px 6px; cursor:pointer;}
+        .tag{font-size:0.8em; color:#555;}
     </style>
 </head>
 <body>
@@ -205,8 +210,69 @@
         const toggleBtn = document.getElementById('toggle-info');
         const playBtn = document.getElementById('play-btn');
 
+        function attachTTS(){
+            document.querySelectorAll('.tts-group').forEach(g=>g.remove());
+            const items = document.querySelectorAll('[data-tts]');
+            items.forEach(el=>{
+                const text = el.getAttribute('data-tts');
+                const group = document.createElement('div');
+                group.className = 'tts-group';
+
+                const configs = [
+                    {lang:'UK', voice:'Brian', fallback:'UK English Male', src:'TTSMP3'},
+                    {lang:'US', voice:'Joanna', fallback:'US English Female', src:'TTSMP3'},
+                    {lang:'ES', voice:'Conchita', fallback:'Spanish Female', src:'TTSMP3'}
+                ];
+
+                configs.forEach(c=>{
+                    const item = document.createElement('div');
+                    item.className = 'tts-item';
+                    const btn = document.createElement('button');
+                    btn.textContent = '🔊 Play';
+                    btn.onclick = () => playTTSMP3(text, c.voice, c.fallback);
+                    const tag = document.createElement('span');
+                    tag.className = 'tag';
+                    tag.textContent = `AI Voice • ${c.lang} • ${c.src}`;
+                    item.appendChild(btn);
+                    item.appendChild(tag);
+                    group.appendChild(item);
+                });
+
+                el.insertAdjacentElement('afterend', group);
+            });
+        }
+
+        async function playTTSMP3(text, voice, fallbackVoice){
+            try{
+                const res = await fetch('https://ttsmp3.com/makemp3_new.php',{
+                    method:'POST',
+                    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                    body:`msg=${encodeURIComponent(text)}&lang=${voice}&source=ttsmp3`
+                });
+                const data = await res.json();
+                if(data.URL){
+                    new Audio(data.URL).play();
+                }else{
+                    playResponsiveVoice(text, fallbackVoice || voice);
+                }
+            }catch(err){
+                console.error('TTSMP3 Error',err);
+                playResponsiveVoice(text, fallbackVoice || voice);
+            }
+        }
+
+        function playResponsiveVoice(text, voice){
+            if(typeof responsiveVoice!=='undefined'){
+                responsiveVoice.speak(text, voice);
+            }else{
+                console.warn('ResponsiveVoice not loaded');
+            }
+        }
+
         function showInfo(name) {
-            document.getElementById('county-name').textContent = name + ' County';
+            const countyNameEl = document.getElementById('county-name');
+            countyNameEl.textContent = name + ' County';
+            countyNameEl.setAttribute('data-tts', name);
             document.getElementById('county-phonetic').textContent = phonetics[name] || '';
             const info = countyInfo[name] || {};
             document.getElementById('county-pronunciation').textContent = info.pronunciation ? `Pronunciation: ${info.pronunciation}` : '';
@@ -215,6 +281,7 @@
             const utterance = new SpeechSynthesisUtterance(name + ' County');
             playBtn.onclick = () => speechSynthesis.speak(utterance);
             playBtn.disabled = false;
+            attachTTS();
             expandInfo();
         }
 
@@ -229,6 +296,8 @@
             infoPanel.classList.toggle('expanded');
             toggleBtn.textContent = infoPanel.classList.contains('expanded') ? 'Hide Info' : 'Show Info';
         });
+
+        document.addEventListener('DOMContentLoaded', attachTTS);
     </script>
 </body>
 </html>
