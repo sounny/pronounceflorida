@@ -39,6 +39,7 @@
             border-top-right-radius: 8px;
             transform: translateY(calc(100% - 40px));
             transition: transform 0.3s;
+            z-index: 1000;
         }
         #info.expanded {
             transform: translateY(0);
@@ -80,8 +81,8 @@
 <body>
     <h1>Pronounce Florida County Map</h1>
     <div id="map"></div>
-    <div id="info">
-        <button id="toggle-info">Show Info</button>
+    <div id="info" class="expanded">
+        <button id="toggle-info">Hide Info</button>
         <h2 id="county-name">Click a county</h2>
         <p id="county-phonetic"></p>
         <p id="county-pronunciation"></p>
