@@ -93,6 +93,7 @@
         <p id="county-origin"></p>
         <p id="county-origin-code"></p>
         <button id="play-btn" disabled>Play Pronunciation</button>
+        <p id="voice-source" style="font-size: 0.9em; color: #555;">Computer voice via Web Speech API</p>
         <p><a href="https://sounny.github.io/pronounceflorida/">Back to Main Page</a></p>
         <p><a href="https://studio--florida-voices-nnorn.us-central1.hosted.app/" target="_blank">Contribute your voice</a></p>
         <p><a href="https://en.wikipedia.org/wiki/ARPABET" target="_blank">Learn more about ARPABET alphabet</a></p>
@@ -168,6 +169,12 @@
             "Wakulla": "W AA0 K UW1 L Y AH0",
             "Walton": "W AO1 L T AH0 N",
             "Washington": "W AA1 SH IH0 NG T AH0 N"
+        };
+
+        const originDescriptions = {
+            "A": "Anglo or other European origin",
+            "S": "Spanish origin",
+            "I": "Indigenous / Native American origin"
         };
 
         const map = L.map('map').setView([27.8, -81.7], 6);
@@ -271,7 +278,8 @@
             const info = countyInfo[name] || {};
             document.getElementById('county-pronunciation').textContent = info.pronunciation ? `Pronunciation: ${info.pronunciation}` : '';
             document.getElementById('county-origin').textContent = info.origin ? `Origin: ${info.origin}` : '';
-            document.getElementById('county-origin-code').textContent = info.originCode ? `Origin Code: ${info.originCode}` : '';
+            const originText = info.originCode ? originDescriptions[info.originCode] || info.originCode : '';
+            document.getElementById('county-origin-code').textContent = originText ? `Origin Type: ${originText}` : '';
             const utterance = new SpeechSynthesisUtterance(name + ' County');
             playBtn.onclick = () => speechSynthesis.speak(utterance);
             playBtn.disabled = false;
