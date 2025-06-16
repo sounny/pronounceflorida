@@ -77,7 +77,8 @@
             font-size: 10px;
             color: #333;
         }
-        .tts-group{margin-top:4px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+        .tts-group{margin-top:4px; display:flex; flex-direction:column; gap:6px;}
+        .tts-line{display:flex; align-items:center; gap:6px;}
         .tts-group button{padding:2px 6px; cursor:pointer;}
         .tag{font-size:0.8em; color:#555; margin-right:8px;}
     </style>
@@ -225,20 +226,24 @@
                 group.className = 'tts-group';
 
                 const configs = [
+                    {lang:'Browser', voice:null, func:()=>playBrowser(text), src:'Web Speech'},
                     {lang:'UK', voice:'Brian', func:()=>playTTSMP3(text,'Brian'), src:'TTSMP3'},
                     {lang:'US', voice:'Joanna', func:()=>playTTSMP3(text,'Joanna'), src:'TTSMP3'},
                     {lang:'ES', voice:'Conchita', func:()=>playTTSMP3(text,'Conchita'), src:'TTSMP3'}
                 ];
 
                 configs.forEach(c=>{
+                    const line = document.createElement('div');
+                    line.className = 'tts-line';
                     const btn = document.createElement('button');
-                    btn.textContent = '🔊 Play';
+                    btn.textContent = 'Play';
                     btn.onclick = c.func;
                     const tag = document.createElement('span');
                     tag.className = 'tag';
-                    tag.textContent = `AI Voice • ${c.lang} • ${c.src}`;
-                    group.appendChild(btn);
-                    group.appendChild(tag);
+                    tag.textContent = c.voice ? `AI Voice • ${c.lang} • ${c.src}` : `Browser Voice`;
+                    line.appendChild(btn);
+                    line.appendChild(tag);
+                    group.appendChild(line);
                 });
 
                 el.insertAdjacentElement('afterend', group);
@@ -269,7 +274,12 @@
                 responsiveVoice.speak(text, voice);
             }else{
                 console.warn('ResponsiveVoice not loaded');
+                playBrowser(text);
             }
+        }
+
+        function playBrowser(text){
+            speechSynthesis.speak(new SpeechSynthesisUtterance(text));
         }
 
         function showInfo(name) {
