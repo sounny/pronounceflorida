@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="leaflet.css">
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_KEY"></script>
     <style>
         body {
             margin: 0;
@@ -225,58 +224,22 @@
                 const group = document.createElement('div');
                 group.className = 'tts-group';
 
-                const configs = [
-                    {lang:'Browser', voice:null, func:()=>playBrowser(text), src:'Web Speech'},
-                    {lang:'UK', voice:'Brian', func:()=>playTTSMP3(text,'Brian'), src:'TTSMP3'},
-                    {lang:'US', voice:'Joanna', func:()=>playTTSMP3(text,'Joanna'), src:'TTSMP3'},
-                    {lang:'ES', voice:'Conchita', func:()=>playTTSMP3(text,'Conchita'), src:'TTSMP3'}
-                ];
-
-                configs.forEach(c=>{
-                    const line = document.createElement('div');
-                    line.className = 'tts-line';
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Play';
-                    btn.onclick = c.func;
-                    const tag = document.createElement('span');
-                    tag.className = 'tag';
-                    tag.textContent = c.voice ? `AI Voice • ${c.lang} • ${c.src}` : `Browser Voice`;
-                    line.appendChild(btn);
-                    line.appendChild(tag);
-                    group.appendChild(line);
-                });
+                const line = document.createElement('div');
+                line.className = 'tts-line';
+                const btn = document.createElement('button');
+                btn.textContent = 'Play';
+                btn.onclick = () => playBrowser(text);
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.textContent = 'Browser Voice';
+                line.appendChild(btn);
+                line.appendChild(tag);
+                group.appendChild(line);
 
                 el.insertAdjacentElement('afterend', group);
             });
         }
 
-        async function playTTSMP3(text, voice){
-            try{
-                const res = await fetch('https://ttsmp3.com/makemp3_new.php',{
-                    method:'POST',
-                    headers:{'Content-Type':'application/x-www-form-urlencoded'},
-                    body:`msg=${encodeURIComponent(text)}&lang=${voice}&source=ttsmp3`
-                });
-                const data = await res.json();
-                if(data.URL){
-                    new Audio(data.URL).play();
-                }else{
-                    playResponsiveVoice(text, voice);
-                }
-            }catch(err){
-                console.error('TTSMP3 Error',err);
-                playResponsiveVoice(text, voice);
-            }
-        }
-
-        function playResponsiveVoice(text, voice){
-            if(typeof responsiveVoice!=='undefined'){
-                responsiveVoice.speak(text, voice);
-            }else{
-                console.warn('ResponsiveVoice not loaded');
-                playBrowser(text);
-            }
-        }
 
         function playBrowser(text){
             speechSynthesis.speak(new SpeechSynthesisUtterance(text));
