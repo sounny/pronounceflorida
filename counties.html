@@ -54,7 +54,6 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        #play-btn { margin-top: 10px; }
         @media (min-width: 768px) {
             #info {
                 top: 0;
@@ -92,7 +91,6 @@
         <p id="county-pronunciation"></p>
         <p id="county-origin"></p>
         <p id="county-origin-code"></p>
-        <button id="play-btn" disabled>Play Pronunciation</button>
         <p id="voice-source" style="font-size: 0.9em; color: #555;">Computer voice via Web Speech API</p>
         <p><a href="https://sounny.github.io/pronounceflorida/">Back to Main Page</a></p>
         <p><a href="https://studio--florida-voices-nnorn.us-central1.hosted.app/" target="_blank">Contribute your voice</a></p>
@@ -199,13 +197,35 @@
                 fillOpacity: 0.9
             };
 
+            let selectedLayer = null;
+
             function onEachFeature(feature, layer) {
                 const name = feature.properties.NAME;
                 layer.bindTooltip(name, {permanent: false, direction: 'center', className: 'county-label'});
                 layer.on({
-                    mouseover: e => layer.setStyle(highlightStyle),
-                    mouseout: e => layer.setStyle(defaultStyle),
-                    click: () => showInfo(name)
+                    mouseover: () => {
+                        if (layer !== selectedLayer) {
+                            layer.setStyle(highlightStyle);
+                        }
+                    },
+                    mouseout: () => {
+                        if (layer !== selectedLayer) {
+                            layer.setStyle(defaultStyle);
+                        }
+                    },
+                    click: () => {
+                        if (selectedLayer && selectedLayer !== layer) {
+                            selectedLayer.setStyle(defaultStyle);
+                            const prevName = selectedLayer.feature.properties.NAME;
+                            selectedLayer.unbindTooltip();
+                            selectedLayer.bindTooltip(prevName, {permanent: false, direction: 'center', className: 'county-label'});
+                        }
+                        selectedLayer = layer;
+                        layer.setStyle(highlightStyle);
+                        layer.unbindTooltip();
+                        layer.bindTooltip(name, {permanent: true, direction: 'center', className: 'county-label'}).openTooltip();
+                        showInfo(name);
+                    }
                 });
             }
 
@@ -214,7 +234,6 @@
 
         const infoPanel = document.getElementById('info');
         const toggleBtn = document.getElementById('toggle-info');
-        const playBtn = document.getElementById('play-btn');
 
         function attachTTS(){
             document.querySelectorAll('.tts-group').forEach(g=>g.remove());
@@ -253,9 +272,6 @@
             document.getElementById('county-origin').textContent = info.origin ? `Origin: ${info.origin}` : '';
             const originText = info.originCode ? originDescriptions[info.originCode] || info.originCode : '';
             document.getElementById('county-origin-code').textContent = originText ? `Origin Type: ${originText}` : '';
-            const utterance = new SpeechSynthesisUtterance(name + ' County');
-            playBtn.onclick = () => speechSynthesis.speak(utterance);
-            playBtn.disabled = false;
             attachTTS();
             expandInfo();
         }
