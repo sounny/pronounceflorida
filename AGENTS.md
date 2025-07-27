@@ -9,3 +9,7 @@
 ## 2024-04-22 - Add AGENTS instructions file
 - Created AGENTS.md with guidelines for logging changes and ideas.
 
+## 2025-07-27 - UI improvements and spelling fix
+- Enhanced landing page design with hero section and call-to-action buttons.
+- Corrected a spelling error in `county_info.json` ("Confederate").
+
