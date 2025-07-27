@@ -10,14 +10,22 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
             background: linear-gradient(135deg, #eef2f7, #ffffff);
             text-align: center;
+            min-height: 100vh;
+            display: flex;
             flex-direction: column;
+        }
+        .hero {
+            background: linear-gradient(135deg, #0021A5, #005ce7);
+            color: #fff;
+            padding: 40px 20px;
+        }
+        .tagline {
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: 400;
         }
         .container {
             padding: 20px;
@@ -25,7 +33,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             max-width: 800px;
-            margin: auto;
+            margin: 20px auto;
         }
         h1 {
             color: #333;
@@ -60,15 +68,34 @@
             margin-bottom: 0.5em;
             font-size: 1.1em;
         }
+        .buttons a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            background: #FA4616;
+            color: #fff;
+            text-decoration: none;
+        }
+        .buttons a.secondary {
+            background: #0021A5;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <header class="hero">
         <h1>Pronounce Florida</h1>
+        <p class="tagline">Discover the stories behind Florida's place names</p>
+        <div class="buttons">
+            <a href="counties.html">View Map Demo</a>
+            <a href="record.html" class="secondary">Contribute Your Voice</a>
+        </div>
+    </header>
+    <div class="container">
         <h2>Project Overview</h2>
-        <p class="project-details">An exploration of place names in Florida, their origins, and Pronunciation. The result will be an Interactive Web Map and Analysis of Place Names.</p>
+        <p class="project-details">An exploration of place names in Florida, their origins, and pronunciation. The result will be an Interactive Web Map and Analysis of Place Names.</p>
         <p class="project-details">The web map will use Leaflet, JavaScript, HTML, CSS, and Bootstrap.</p>
-        <p class="project-details">The analysis will include origins of place names, categories of namesakes, and alternative forms that will highlight and enhance the understanding of Florida Geography.</p>
+        <p class="project-details">The analysis will include origins of place names, categories of namesakes, and alternative forms that will highlight and enhance the understanding of Florida geography.</p>
         <p class="project-details">This research project investigates the pronunciation, origin, and cultural significance of place names across Florida. Many Florida place names are derived from Indigenous, Spanish, Anglo, or other linguistic roots and are frequently mispronounced. Our goal is to explore these names and present them in a fun and educational way.</p>
         <p class="project-details">Gemma and Emily will gather historical, cultural, and linguistic information on select place names across cities, towns, lakes, and rivers. They will record or collect audio clips of native and local pronunciations, write attribute tables of each place, and develop an interactive web map to display this information. The final product will be a publicly accessible platform featuring written entries, media elements, and web-based geospatial visualization.</p>
         <h2>Research Team</h2>
