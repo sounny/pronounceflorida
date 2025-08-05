@@ -20,3 +20,7 @@
 - Highlighted hosted map application with a primary button.
 - Updated landing page copy and removed centered text for better readability.
 
+## 2025-08-07 - Re-center hero text
+- Adjusted landing page header to center the hero section content for improved balance.
+- Related commit: 62403c1.
+
