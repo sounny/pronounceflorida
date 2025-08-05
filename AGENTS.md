@@ -13,3 +13,6 @@
 - Enhanced landing page design with hero section and call-to-action buttons.
 - Corrected a spelling error in `county_info.json` ("Confederate").
 
+## 2025-08-04 - Ensure hero text is white
+- Added specific CSS rules so the landing page heading and tagline display in white.
+
