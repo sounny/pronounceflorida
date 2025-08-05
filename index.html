@@ -12,7 +12,6 @@
             font-family: 'Roboto', sans-serif;
             margin: 0;
             background: linear-gradient(135deg, #eef2f7, #ffffff);
-            text-align: center;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -21,6 +20,7 @@
             background: linear-gradient(135deg, #0021A5, #005ce7);
             color: #fff;
             padding: 40px 20px;
+            text-align: left;
         }
         .tagline {
             margin-top: 10px;
@@ -35,6 +35,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             max-width: 800px;
             margin: 20px auto;
+            text-align: left;
         }
         h1 {
             color: #333;
@@ -72,14 +73,21 @@
             margin-bottom: 0.5em;
             font-size: 1.1em;
         }
+        .buttons {
+            margin-top: 20px;
+        }
         .buttons a {
             display: inline-block;
-            margin: 10px;
+            margin: 10px 10px 10px 0;
             padding: 10px 20px;
             border-radius: 4px;
             background: #FA4616;
             color: #fff;
             text-decoration: none;
+        }
+        .buttons a.featured {
+            padding: 15px 30px;
+            font-size: 1.1em;
         }
         .buttons a.secondary {
             background: #0021A5;
@@ -91,25 +99,23 @@
         <h1>Pronounce Florida</h1>
         <p class="tagline">Discover the stories behind Florida's place names</p>
         <div class="buttons">
-            <a href="counties.html">View Map Demo</a>
+            <a href="https://studio--pronounce-florida.us-central1.hosted.app/map" class="featured">Explore the Map</a>
             <a href="record.html" class="secondary">Contribute Your Voice</a>
         </div>
     </header>
     <div class="container">
         <h2>Project Overview</h2>
-        <p class="project-details">An exploration of place names in Florida, their origins, and pronunciation. The result will be an Interactive Web Map and Analysis of Place Names.</p>
-        <p class="project-details">The web map will use Leaflet, JavaScript, HTML, CSS, and Bootstrap.</p>
-        <p class="project-details">The analysis will include origins of place names, categories of namesakes, and alternative forms that will highlight and enhance the understanding of Florida geography.</p>
-        <p class="project-details">This research project investigates the pronunciation, origin, and cultural significance of place names across Florida. Many Florida place names are derived from Indigenous, Spanish, Anglo, or other linguistic roots and are frequently mispronounced. Our goal is to explore these names and present them in a fun and educational way.</p>
-        <p class="project-details">Gemma and Emily will gather historical, cultural, and linguistic information on select place names across cities, towns, lakes, and rivers. They will record or collect audio clips of native and local pronunciations, write attribute tables of each place, and develop an interactive web map to display this information. The final product will be a publicly accessible platform featuring written entries, media elements, and web-based geospatial visualization.</p>
+        <p class="project-details">Pronounce Florida explores the origins and correct pronunciation of place names throughout the state. Our interactive map shares stories for each location and lets you hear local pronunciations.</p>
+        <p class="project-details">Built with Leaflet, JavaScript, HTML, CSS, and Bootstrap, the project highlights the linguistic and cultural diversity of Florida's geography.</p>
+        <p class="project-details">Gemma Egan and Emily Mancha are gathering historical, cultural, and linguistic information on select place names across cities, towns, lakes, and rivers. They collect audio clips of native pronunciations and develop a publicly accessible map to share this information.</p>
         <h2>Research Team</h2>
         <ul class="researchers">
             <li><a href="https://sounny.github.io">Dr. Moulay Anwar Sounny-Slitine</a></li>
             <li>Gemma Egan</li>
             <li>Emily Mancha</li>
         </ul>
-        <h2>Demo</h2>
-        <p class="project-details"><a href="https://sounny.github.io/pronounceflorida/counties.html">View the County Map Demo</a></p>
+        <h2>Interactive Map</h2>
+        <p class="project-details"><a href="https://studio--pronounce-florida.us-central1.hosted.app/map">Launch the live map application</a></p>
     </div>
 </body>
 </html>
