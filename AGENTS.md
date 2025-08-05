@@ -16,3 +16,7 @@
 ## 2025-08-04 - Ensure hero text is white
 - Added specific CSS rules so the landing page heading and tagline display in white.
 
+## 2025-08-06 - Add featured map link and left-align text
+- Highlighted hosted map application with a primary button.
+- Updated landing page copy and removed centered text for better readability.
+
